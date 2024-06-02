@@ -2,8 +2,8 @@ const goalText = document.getElementById("text_input");
 const addBtn = document.getElementById("add_btn");
 const goal_list = document.getElementById("goal_list");
 
-// Get the tasks from localStorage
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+// Initialize goal list from local storage
+let goalList = JSON.parse(localStorage.getItem("goalList")) || [];
 
 function addGoal() {
   const goalTextValue = goalText.value.trim();
@@ -13,7 +13,8 @@ function addGoal() {
   }
 
   const goalItem = document.createElement("li");
-  const textSpan = document.createElement("span");
+  const textSpan = document.createElement("div");
+  textSpan.className = "list_item";
   textSpan.textContent = goalTextValue;
 
   const delBtn = document.createElement("button");
@@ -21,7 +22,7 @@ function addGoal() {
 
   delBtn.addEventListener("click", () => {
     goal_list.removeChild(goalItem);
-    removeTaskFromStorage(textSpan.textContent);
+    removeGoalFromStorage(goalTextValue);
   });
 
   const doneBtn = document.createElement("button");
@@ -37,45 +38,56 @@ function addGoal() {
   goalItem.appendChild(delBtn);
   goal_list.appendChild(goalItem);
 
-  // Add the task to localStorage
-  tasks.push(goalTextValue);
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+  // Add goal to local storage
+  goalList.push({ text: goalTextValue, done: false });
+  localStorage.setItem("goalList", JSON.stringify(goalList));
 
   goalText.value = "";
 }
 
-// Remove a task from localStorage
-function removeTaskFromStorage(task) {
-  tasks = tasks.filter(t => t !== task);
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+// Function to remove goal from local storage
+function removeGoalFromStorage(goalTextValue) {
+  goalList = goalList.filter((goal) => goal.text !== goalTextValue);
+  localStorage.setItem("goalList", JSON.stringify(goalList));
 }
 
-// Load tasks from localStorage and display them
-tasks.forEach(task => {
-  const goalItem = document.createElement("li");
-  const textSpan = document.createElement("span");
-  textSpan.textContent = task;
+// Load goals from local storage on page load
+function loadGoals() {
+  goalList.forEach((goal) => {
+    const goalItem = document.createElement("li");
+    const textSpan = document.createElement("div");
+    textSpan.className = "list_item";
+    textSpan.textContent = goal.text;
 
-  const delBtn = document.createElement("button");
-  delBtn.textContent = "Remove";
+    if (goal.done) {
+      textSpan.style.textDecoration = "line-through";
+    }
 
-  delBtn.addEventListener("click", () => {
-    goal_list.removeChild(goalItem);
-    removeTaskFromStorage(textSpan.textContent);
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "Remove";
+
+    delBtn.addEventListener("click", () => {
+      goal_list.removeChild(goalItem);
+      removeGoalFromStorage(goal.text);
+    });
+
+    const doneBtn = document.createElement("button");
+    doneBtn.className = "tick_btn";
+    doneBtn.innerHTML = `<i class="fa-solid fa-check"></i>`;
+
+    doneBtn.addEventListener("click", () => {
+      textSpan.style.textDecoration = "line-through";
+      goal.done = true;
+      localStorage.setItem("goalList", JSON.stringify(goalList));
+    });
+
+    goalItem.appendChild(textSpan);
+    goalItem.appendChild(doneBtn);
+    goalItem.appendChild(delBtn);
+    goal_list.appendChild(goalItem);
   });
+}
 
-  const doneBtn = document.createElement("button");
-  doneBtn.className = "tick_btn";
-  doneBtn.innerHTML = `<i class="fa-solid fa-check"></i>`;
+loadGoals();
 
-  doneBtn.addEventListener("click", () => {
-    textSpan.style.textDecoration = "line-through";
-  });
-
-  goalItem.appendChild(textSpan);
-  goalItem.appendChild(doneBtn);
-  goalItem.appendChild(delBtn);
-  goal_list.appendChild(goalItem);
-});
-
-addBtn.addEventListener('click', addGoal);
+addBtn.addEventListener("click", addGoal);
