@@ -1,0 +1,99 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    list-style: none;
+  }
+  
+  body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    background-color: #f4f4f4;
+    justify-content: center;
+  }
+  
+  .container {
+    width: 300px;
+    text-align: center;
+    background-color: aliceblue;
+    padding: 20px;
+    border-radius: 16px;
+    border: 2px solid #2a2a2a;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    font-size: 25px;
+    margin: 0 0 20px;
+  }
+  
+  input {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #5cb85c;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 30px;
+  }
+  
+  button:hover {
+    background: #4cae4c;
+  }
+  
+  ul {
+    padding: 0;
+  }
+  
+  li {
+    background: #f9f9f9;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    border: 2px solid #212121;
+  }
+  
+  .list_item {
+    height: auto;
+    width: 50%;
+    word-wrap: break-word;
+  }
+  
+  li button {
+    position: relative;
+    top: 13px;
+    transform: translateY(-50%);
+    background: #d9534f;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+  
+  li button:hover {
+    background: #c9302c;
+  }
+
+  .tick_btn {
+    background-color: #5cb85c;
+  }
+
+  .tick_btn:hover {
+    background-color: #4cae4c;
+  }
