@@ -2,7 +2,6 @@ const goalText = document.getElementById("text_input");
 const addBtn = document.getElementById("add_btn");
 const goal_list = document.getElementById("goal_list");
 
-
 let goalList = JSON.parse(localStorage.getItem("goalList")) || [];
 
 addBtn.addEventListener("click", addGoal);
@@ -38,8 +37,12 @@ function createGoalItem(text, done) {
   delBtn.innerHTML = `<i class="fa-regular fa-trash-can"></i>`;
 
   delBtn.addEventListener("click", () => {
-    goal_list.removeChild(goalItem);
-    removeGoalFromStorage(text);
+    if (
+      confirm("Are you sure? AKSHAY says, You should complete your GOAL first.")
+    ) {
+      goal_list.removeChild(goalItem);
+      removeGoalFromStorage(text);
+    }
   });
 
   const doneBtn = document.createElement("button");
@@ -47,24 +50,25 @@ function createGoalItem(text, done) {
   doneBtn.innerHTML = `<i class="fa-solid fa-check"></i>`;
 
   if (done) {
-    doneBtn.style.color = "gray"; 
+    doneBtn.style.backgroundColor = "gray";
   }
 
   doneBtn.addEventListener("click", () => {
     if (done) {
       textSpan.style.textDecoration = "none";
-      doneBtn.style.color = "black"; 
+      doneBtn.style.backgroundColor = "";
+      doneBtn.style.color = "";
       done = false;
     } else {
       textSpan.style.textDecoration = "line-through";
-      doneBtn.style.color = "gray"; 
+      doneBtn.style.backgroundColor = "gray";
       done = true;
     }
-
     updateGoalInStorage(text, done);
   });
 
   const editBtn = document.createElement("button");
+  editBtn.className = "edit_btn"
   editBtn.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
 
   editBtn.addEventListener("click", () => {
@@ -100,28 +104,28 @@ function createGoalItem(text, done) {
   return goalItem;
 }
 
-
 function removeGoalFromStorage(goalTextValue) {
   goalList = goalList.filter((goal) => goal.text !== goalTextValue);
   localStorage.setItem("goalList", JSON.stringify(goalList));
 }
 
-
 function updateGoalInStorage(goalTextValue, doneStatus) {
   goalList = goalList.map((goal) =>
-    goal.text === goalTextValue ? { text: goalTextValue, done: doneStatus } : goal
+    goal.text === goalTextValue
+      ? { text: goalTextValue, done: doneStatus }
+      : goal
   );
   localStorage.setItem("goalList", JSON.stringify(goalList));
 }
-
 
 function updateGoalTextInStorage(oldTextValue, newGoalTextValue) {
   goalList = goalList.map((goal) =>
-    goal.text === oldTextValue ? { text: newGoalTextValue, done: goal.done } : goal
+    goal.text === oldTextValue
+      ? { text: newGoalTextValue, done: goal.done }
+      : goal
   );
   localStorage.setItem("goalList", JSON.stringify(goalList));
 }
-
 
 function loadGoals() {
   goalList.forEach((goal) => {
@@ -130,6 +134,4 @@ function loadGoals() {
   });
 }
 
-
 document.addEventListener("DOMContentLoaded", loadGoals);
-
